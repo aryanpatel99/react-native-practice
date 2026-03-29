@@ -1,15 +1,14 @@
+import { Ionicons } from '@expo/vector-icons'
 import { router, useLocalSearchParams } from 'expo-router'
 import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import Colors from '../../../constants/Colors'
 import { TASKS } from '../../../constants/tasks'
-import { Ionicons } from '@expo/vector-icons';
-import { TouchableOpacity } from 'react-native';
 
 const TaskDetailScreen = () => {
-    const {id} = useLocalSearchParams()
+    const {id} = useLocalSearchParams<{ id: string }>()
 
-    const task = TASKS.find(t => t.id === id);
+    const task = TASKS.find(t => String(t.id) === id);
 
     if(!task){
         return (
