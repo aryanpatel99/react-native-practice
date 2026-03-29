@@ -8,11 +8,15 @@ import Header from '../../components/Header';
 import DateSelector from '../../components/DateSelector';
 import FilterTabs from '../../components/FilterTabs';
 import TaskCard from '../../components/TaskCard';
+import { Pressable } from 'react-native';
+import { useRouter } from 'expo-router';
 
 const Index = () => {
   const insets = useSafeAreaInsets();
   const [activeFilter, setActiveFilter] = React.useState<FilterOptions>("All");
   const [filteredTasks, setFilteredTasks] = React.useState(TASKS);
+
+  const router = useRouter();
 
   React.useEffect(()=>{
     if(activeFilter === "All"){
@@ -27,7 +31,11 @@ const Index = () => {
       <StatusBar style="light" />
       <FlatList data={filteredTasks} 
       keyExtractor={(item)=> item.id}
-      renderItem={({item})=> <TaskCard task={item} />}
+      renderItem={({item})=> (
+        <Pressable onPress={()=> router.push(`/task/${item.id}`)}>
+          <TaskCard task={item} />
+        </Pressable>
+    )}
       ListHeaderComponent={
         <>
         {/* header */}
@@ -40,6 +48,13 @@ const Index = () => {
 
         </>
       }
+
+      ListEmptyComponent={
+        <>
+        <Text style={styles.emptyText}>No tasks found for this filter.</Text>
+        </>
+      }
+
       contentContainerStyle={styles.list}
       showsVerticalScrollIndicator={false}
       />
@@ -56,5 +71,6 @@ const styles = StyleSheet.create({
   },
   list:{
     paddingBottom: 24,
-  }
+  },
+  emptyText: {color: Colors.textPrimary, fontSize: 16, textAlign: 'center', marginTop: 32}
 })
